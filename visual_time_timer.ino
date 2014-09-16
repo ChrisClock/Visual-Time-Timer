@@ -12,7 +12,6 @@ LiquidCrystal lcd(3,4,5,6,7,8);
 #define NUM_LEDS   50
 CRGB leds[NUM_LEDS];
 
-
 // time always contains the time in the beginning of the sketch
 unsigned long time;
 // saved time state to count seconds
@@ -75,6 +74,7 @@ void loop() {
   // Set state
   // alamState: 0 not set, 1 setting, 2 running, 3 close, 4 ringing
   if      (runningTime==0) {
+    alarmState = 0;
   }  // if runningTime reached 0, alarm is off
   else if (abs(alarmTime*60-runningTime)<=10) {
     alarmState = 1;
@@ -174,7 +174,9 @@ void loop() {
     fill_solid(&(leds[0]),NUM_LEDS, CHSV( color, 255, 255) );
   }
   else if(alarmState==3){
-    fill_solid(&(leds[0]),NUM_LEDS, CRGB( 255, 0, 0) );
+    //fill_solid(&(leds[0]),NUM_LEDS, CRGB( 255, 0, 0) );
+    int color = map(runningTime,0,alarmTime*60,0,255);
+    fill_solid(&(leds[0]),NUM_LEDS, CHSV( color, 255, 255) );
   }
   else if(alarmState==4){
     fill_solid(&(leds[0]),NUM_LEDS, CHSV( 0, 255, 255) );
@@ -201,7 +203,7 @@ void loop() {
     ledState = !ledState;
   }
 
-  //Serial.println(ledState);
+  Serial.println(runningTime);
   delay(10);
 }
 
